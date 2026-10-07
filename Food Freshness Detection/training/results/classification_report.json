@@ -1,0 +1,160 @@
+{
+  "test_loss": 0.16571587324142456,
+  "test_accuracy": 0.949394941329956,
+  "test_images": 1818,
+  "num_classes": 20,
+  "class_names": [
+    "FreshApple",
+    "FreshBanana",
+    "FreshBellpepper",
+    "FreshCarrot",
+    "FreshCucumber",
+    "FreshMango",
+    "FreshOrange",
+    "FreshPotato",
+    "FreshStrawberry",
+    "FreshTomato",
+    "RottenApple",
+    "RottenBanana",
+    "RottenBellpepper",
+    "RottenCarrot",
+    "RottenCucumber",
+    "RottenMango",
+    "RottenOrange",
+    "RottenPotato",
+    "RottenStrawberry",
+    "RottenTomato"
+  ],
+  "per_class_metrics": {
+    "FreshApple": {
+      "precision": 0.9588,
+      "recall": 1.0,
+      "f1_score": 0.9789,
+      "support": 93
+    },
+    "FreshBanana": {
+      "precision": 0.9794,
+      "recall": 1.0,
+      "f1_score": 0.9896,
+      "support": 95
+    },
+    "FreshBellpepper": {
+      "precision": 0.8932,
+      "recall": 0.9892,
+      "f1_score": 0.9388,
+      "support": 93
+    },
+    "FreshCarrot": {
+      "precision": 0.9886,
+      "recall": 0.9355,
+      "f1_score": 0.9613,
+      "support": 93
+    },
+    "FreshCucumber": {
+      "precision": 0.9583,
+      "recall": 1.0,
+      "f1_score": 0.9787,
+      "support": 92
+    },
+    "FreshMango": {
+      "precision": 1.0,
+      "recall": 0.8478,
+      "f1_score": 0.9176,
+      "support": 92
+    },
+    "FreshOrange": {
+      "precision": 1.0,
+      "recall": 0.9348,
+      "f1_score": 0.9663,
+      "support": 92
+    },
+    "FreshPotato": {
+      "precision": 0.9362,
+      "recall": 0.9462,
+      "f1_score": 0.9412,
+      "support": 93
+    },
+    "FreshStrawberry": {
+      "precision": 1.0,
+      "recall": 0.9451,
+      "f1_score": 0.9718,
+      "support": 91
+    },
+    "FreshTomato": {
+      "precision": 1.0,
+      "recall": 0.9674,
+      "f1_score": 0.9834,
+      "support": 92
+    },
+    "RottenApple": {
+      "precision": 0.8947,
+      "recall": 0.9551,
+      "f1_score": 0.9239,
+      "support": 89
+    },
+    "RottenBanana": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 87
+    },
+    "RottenBellpepper": {
+      "precision": 0.9231,
+      "recall": 0.8,
+      "f1_score": 0.8571,
+      "support": 90
+    },
+    "RottenCarrot": {
+      "precision": 0.9011,
+      "recall": 0.9425,
+      "f1_score": 0.9213,
+      "support": 87
+    },
+    "RottenCucumber": {
+      "precision": 0.9881,
+      "recall": 0.9222,
+      "f1_score": 0.954,
+      "support": 90
+    },
+    "RottenMango": {
+      "precision": 0.9773,
+      "recall": 0.9556,
+      "f1_score": 0.9663,
+      "support": 90
+    },
+    "RottenOrange": {
+      "precision": 0.8544,
+      "recall": 0.9778,
+      "f1_score": 0.9119,
+      "support": 90
+    },
+    "RottenPotato": {
+      "precision": 0.8723,
+      "recall": 0.9213,
+      "f1_score": 0.8962,
+      "support": 89
+    },
+    "RottenStrawberry": {
+      "precision": 0.9474,
+      "recall": 1.0,
+      "f1_score": 0.973,
+      "support": 90
+    },
+    "RottenTomato": {
+      "precision": 0.9551,
+      "recall": 0.9444,
+      "f1_score": 0.9497,
+      "support": 90
+    }
+  },
+  "macro_avg": {
+    "precision": 0.9514,
+    "recall": 0.9492,
+    "f1_score": 0.9491
+  },
+  "weighted_avg": {
+    "precision": 0.9517,
+    "recall": 0.9494,
+    "f1_score": 0.9493
+  }
+}

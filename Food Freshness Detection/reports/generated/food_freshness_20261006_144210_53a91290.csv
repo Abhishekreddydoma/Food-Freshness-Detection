@@ -1,0 +1,2 @@
+Date/Time,Image Filename,Predicted Class,Produce,Freshness,Confidence,Quality Status,Visual Summary,Grad-CAM Image
+2026-10-06 14:42:10,freshPepper (102).jpg,FreshBellpepper,Bellpepper,Fresh,99.99%,Visually appears fresh,The model detected visual characteristics associated with fresh Bellpepper.,/static/gradcam/gradcam_42bd72efc62b.jpg

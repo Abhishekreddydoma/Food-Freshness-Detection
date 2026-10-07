@@ -1,0 +1,12 @@
+{
+  "test_image": "freshApple (113).jpg",
+  "image_path": "dataset/test/FreshApple/freshApple (113).jpg",
+  "actual_class": "FreshApple",
+  "predicted_class": "FreshApple",
+  "produce": "Apple",
+  "freshness": "Fresh",
+  "confidence": 0.9995036125183105,
+  "model_loaded": true,
+  "class_mapping_loaded": true,
+  "status": "PASSED"
+}

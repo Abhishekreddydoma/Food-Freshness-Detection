@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI-Powered Food Freshness Detection using computer vision and Grad-CAM visual explanations." />
+  <title>Food Freshness Detection — AI Computer Vision Dashboard</title>
+  
+  <!-- Preconnect Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5.0" />
+</head>
+<body>
+
+  <!-- ==================== APPLICATION CONTAINER (1200px Centered) ==================== -->
+  <div class="app-container">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="site-header" role="banner">
+      <a href="/" class="header-brand" aria-label="Food Freshness Detection Dashboard">
+        <div class="brand-icon-box" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a9 9 0 0 1 9 9c0 4.97-4.03 9-9 9A9 9 0 0 1 3 11a9 9 0 0 1 9-9Z"></path>
+            <path d="M12 2v20"></path>
+            <path d="M12 12 4.93 4.93"></path>
+            <path d="m19.07 4.93-7.07 7.07"></path>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <span class="brand-title">Food Freshness Detection</span>
+          <span class="brand-subtitle">AI-Powered Food Quality Analysis</span>
+        </div>
+      </a>
+
+      <div class="model-status-pill" aria-label="AI Model Status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>● AI Model Online</span>
+      </div>
+    </header>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span>✦ COMPUTER VISION INSPECTION</span>
+      </div>
+      <h1 class="hero-title">AI-Powered Food Freshness Detection</h1>
+      <p class="hero-subtitle">
+        Upload a fruit or vegetable image and let our computer vision model analyze its freshness.
+      </p>
+
+      <!-- 3 Compact Feature Cards -->
+      <div class="feature-highlights-grid">
+        <div class="feature-pill">
+          <div class="feature-icon-box icon-green" aria-hidden="true">⚡</div>
+          <div class="feature-texts">
+            <span class="feature-label">Fast Analysis</span>
+            <span class="feature-desc">Get results in seconds</span>
+          </div>
+        </div>
+
+        <div class="feature-pill">
+          <div class="feature-icon-box icon-cyan" aria-hidden="true">◎</div>
+          <div class="feature-texts">
+            <span class="feature-label">High Accuracy</span>
+            <span class="feature-desc">Trained on real-world data</span>
+          </div>
+        </div>
+
+        <div class="feature-pill">
+          <div class="feature-icon-box icon-blue" aria-hidden="true">◉</div>
+          <div class="feature-texts">
+            <span class="feature-label">Visual Explanation</span>
+            <span class="feature-desc">See what the AI sees</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TWO-COLUMN MAIN DASHBOARD ==================== -->
+    <main class="dashboard-two-col">
+
+      <!-- LEFT CARD: IMAGE ANALYSIS -->
+      <section class="glass-card card-upload-theme" aria-labelledby="image-analysis-heading">
+        <div class="card-header-flex">
+          <div class="card-title-group">
+            <div class="card-header-icon icon-blue" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                <circle cx="9" cy="9" r="2"></circle>
+                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+              </svg>
+            </div>
+            <div class="card-title-group-text">
+              <h2 id="image-analysis-heading">Image Analysis</h2>
+              <p>Upload a clear image of your food item.</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="upload-form" action="/predict" method="post" enctype="multipart/form-data" novalidate>
+          
+          <!-- Upload Drop Zone -->
+          <div class="upload-drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Upload food item image">
+            <input
+              type="file"
+              id="food-image-input"
+              name="food_image"
+              accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+              class="file-input-hidden"
+              tabindex="-1"
+            />
+            <div class="upload-zone-content">
+              <div class="upload-center-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+              </div>
+              <div>
+                <p class="upload-zone-text-main">Drag &amp; drop your image here</p>
+                <p class="upload-zone-sub">or click to browse from device</p>
+              </div>
+              <div class="btn-browse-gradient" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <span>Browse Image</span>
+              </div>
+              <span class="upload-formats-text">JPG · JPEG · PNG</span>
+            </div>
+          </div>
+
+          <!-- Selected Image Preview Container -->
+          <div id="preview-box-container" class="preview-box-container" aria-live="polite">
+            <div class="preview-img-wrapper">
+              <img id="preview-img-element" class="preview-img-element" src="#" alt="Uploaded food item preview" />
+            </div>
+
+            <div class="preview-meta-row">
+              <div class="preview-meta-details">
+                <span id="preview-filename-text" class="preview-filename-text">sample.jpg</span>
+                <span id="preview-filesize-text" class="preview-filesize-text">JPG • 0 KB</span>
+                <span class="preview-tag-indicator">✓ Image selected</span>
+              </div>
+
+              <button type="button" id="btn-remove-preview" class="btn-remove-preview" aria-label="Remove and choose another image">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                </svg>
+                <span>Change</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Primary Analyze Button -->
+          <button type="submit" id="submit-btn" class="btn-analyze-primary" disabled>
+            <span id="btn-spinner" class="spinner" style="display: none;" aria-hidden="true"></span>
+            <span id="btn-play-icon" aria-hidden="true">▶</span>
+            <span id="btn-label">Analyze Freshness</span>
+          </button>
+        </form>
+
+        <!-- Error Alert Message -->
+        <div id="error-alert-box" class="error-alert-box" role="alert" aria-live="assertive">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <div class="error-alert-text" id="error-alert-text">An error occurred.</div>
+        </div>
+      </section>
+
+      <!-- RIGHT CARD: ANALYSIS RESULT -->
+      <section class="glass-card card-result-theme" aria-labelledby="analysis-result-heading">
+        <div class="card-header-flex">
+          <div class="card-title-group">
+            <div class="card-header-icon icon-green" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <div class="card-title-group-text">
+              <h2 id="analysis-result-heading">Analysis Result</h2>
+              <p>AI-powered visual assessment of your food item.</p>
+            </div>
+          </div>
+          <span id="analyzed-timestamp" class="analyzed-time-badge" style="display: none;">Analyzed</span>
+        </div>
+
+        <div class="results-inner-stack">
+          
+          <!-- Empty Placeholder State -->
+          <div id="results-empty-state" class="results-empty-state">
+            <div class="empty-state-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m10 15 5-3-5-3v6Z"></path>
+              </svg>
+            </div>
+            <p class="empty-state-title">Awaiting Analysis</p>
+            <p class="empty-state-desc">Upload a food image on the left and click "Analyze Freshness" to begin.</p>
+          </div>
+
+          <!-- Loaded Active Results Dashboard -->
+          <div id="results-loaded-state" class="results-loaded-state">
+            
+            <!-- 3 Small Result Metric Tiles -->
+            <div class="metrics-row-grid">
+              
+              <!-- Tile 1: Produce -->
+              <div class="metric-tile tile-produce">
+                <div class="metric-tile-header">
+                  <span>🍊 Produce</span>
+                </div>
+                <div id="res-produce-val" class="metric-tile-val val-produce">—</div>
+              </div>
+
+              <!-- Tile 2: Freshness -->
+              <div class="metric-tile tile-freshness">
+                <div class="metric-tile-header">
+                  <span>🌿 Freshness</span>
+                </div>
+                <div>
+                  <div id="res-freshness-badge" class="badge-freshness-status badge-fresh">
+                    <span id="res-freshness-icon">✓</span>
+                    <span id="res-freshness-text">FRESH</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tile 3: Confidence -->
+              <div class="metric-tile tile-confidence">
+                <div class="metric-tile-header">
+                  <span>◈ Confidence</span>
+                </div>
+                <div id="res-confidence-tile-val" class="metric-tile-val font-mono">0.00%</div>
+              </div>
+
+            </div>
+
+            <!-- Model Confidence Progress Bar -->
+            <div class="confidence-box-wrapper">
+              <div class="confidence-header-flex">
+                <span class="confidence-header-label">Model Confidence</span>
+                <span id="res-confidence-pct-text" class="confidence-header-pct">0.00%</span>
+              </div>
+              <div class="confidence-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                <div id="res-confidence-fill" class="confidence-progress-fill fill-fresh" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Quality Inspection Banner -->
+            <div id="quality-card-banner" class="quality-card-banner banner-fresh">
+              <span id="quality-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </span>
+              <span id="res-quality-status-text">Visually appears fresh</span>
+            </div>
+
+            <!-- Visual Summary Card -->
+            <div class="visual-summary-container">
+              <div class="summary-heading-label">
+                <span>▣ Visual Summary</span>
+              </div>
+              <p id="res-visual-summary-text" class="summary-text-paragraph">
+                The model detected visual characteristics associated with the sample.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== SECOND ROW: DUAL SUBSECTIONS (GRAD-CAM + DETAILS) ==================== -->
+    <div class="bottom-dual-row" id="bottom-dual-row">
+      
+      <!-- Left: AI Visual Explanation (Grad-CAM Comparison) -->
+      <section class="glass-card card-gradcam-theme gradcam-section-card" id="gradcam-section-card" aria-labelledby="gradcam-heading">
+        <div class="card-header-flex">
+          <div class="card-title-group">
+            <div class="card-header-icon icon-cyan" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="4"></circle>
+                <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+                <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+              </svg>
+            </div>
+            <div class="card-title-group-text">
+              <h2 id="gradcam-heading">AI Visual Explanation (Grad-CAM)</h2>
+              <p>Highlighted regions show features contributing most to prediction.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="gradcam-dual-grid">
+          <!-- Left: Original Image -->
+          <div class="gradcam-pane">
+            <div class="gradcam-pane-header">
+              <span class="gradcam-pane-title">📷 Original Image</span>
+            </div>
+            <div class="gradcam-img-frame">
+              <img id="gradcam-orig-img" class="gradcam-img-element" src="#" alt="Original uploaded food item" />
+            </div>
+          </div>
+
+          <!-- Right: Grad-CAM Heatmap -->
+          <div class="gradcam-pane">
+            <div class="gradcam-pane-header">
+              <span class="gradcam-pane-title">🔥 Grad-CAM Heatmap</span>
+            </div>
+            <div class="gradcam-img-frame">
+              <img id="gradcam-heatmap-img" class="gradcam-img-element" src="#" alt="Grad-CAM convolutional heatmap overlay" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Analysis Details Table -->
+      <section class="glass-card card-details-theme details-section-card" id="details-section-card" aria-labelledby="details-heading">
+        <div class="card-header-flex">
+          <div class="card-title-group">
+            <div class="card-header-icon icon-blue" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            </div>
+            <div class="card-title-group-text">
+              <h2 id="details-heading">Analysis Details</h2>
+              <p>Metadata and classification parameters.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="details-table-wrapper">
+          <table class="details-table">
+            <tbody>
+              <tr>
+                <th scope="row">Image</th>
+                <td id="table-filename" class="font-mono">—</td>
+              </tr>
+              <tr>
+                <th scope="row">Predicted Class</th>
+                <td id="table-predicted-class" class="font-mono">—</td>
+              </tr>
+              <tr>
+                <th scope="row">Produce</th>
+                <td id="table-produce">—</td>
+              </tr>
+              <tr>
+                <th scope="row">Freshness</th>
+                <td id="table-freshness">—</td>
+              </tr>
+              <tr>
+                <th scope="row">Confidence</th>
+                <td id="table-confidence" class="font-mono">—</td>
+              </tr>
+              <tr>
+                <th scope="row">Quality Status</th>
+                <td id="table-quality-status">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ==================== REPORT ACTION BUTTONS ==================== -->
+    <section class="glass-card actions-section-card" id="actions-section-card" aria-label="Export and Actions">
+      <div class="report-buttons-row">
+        <!-- PDF Report -->
+        <a href="/report/pdf" id="btn-download-pdf" class="btn-report btn-pdf" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          <span>Download PDF Report</span>
+        </a>
+
+        <!-- CSV Report -->
+        <a href="/report/csv" id="btn-download-csv" class="btn-report btn-csv" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <path d="M8 13h2"></path>
+            <path d="M8 17h2"></path>
+            <path d="M14 13h2"></path>
+            <path d="M14 17h2"></path>
+          </svg>
+          <span>Download CSV Report</span>
+        </a>
+
+        <!-- Analyze Another Image -->
+        <button type="button" id="btn-reset-app" class="btn-report btn-new-analysis">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+            <path d="M21 3v5h-5"></path>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+            <path d="M8 16H3v5"></path>
+          </svg>
+          <span>Analyze Another Image</span>
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner-flex">
+      <div class="footer-left">
+        <span class="footer-brand-title">Food Freshness Detection</span> &mdash;
+        <span>AI-based visual food quality analysis</span>
+      </div>
+      <div class="footer-right">
+        <span class="footer-tagline-heart">♥</span> Good Food. A Healthier Tomorrow.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== FRONTEND JAVASCRIPT ==================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Inputs & Form Controls
+      const fileInput = document.getElementById('food-image-input');
+      const dropZone = document.getElementById('drop-zone');
+      const uploadForm = document.getElementById('upload-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const btnSpinner = document.getElementById('btn-spinner');
+      const btnPlayIcon = document.getElementById('btn-play-icon');
+      const btnLabel = document.getElementById('btn-label');
+      const btnRemovePreview = document.getElementById('btn-remove-preview');
+      const btnResetApp = document.getElementById('btn-reset-app');
+
+      // Preview Elements
+      const previewBoxContainer = document.getElementById('preview-box-container');
+      const previewImgElement = document.getElementById('preview-img-element');
+      const previewFilenameText = document.getElementById('preview-filename-text');
+      const previewFilesizeText = document.getElementById('preview-filesize-text');
+
+      // Error Alert Box
+      const errorAlertBox = document.getElementById('error-alert-box');
+      const errorAlertText = document.getElementById('error-alert-text');
+
+      // Results Elements
+      const resultsEmptyState = document.getElementById('results-empty-state');
+      const resultsLoadedState = document.getElementById('results-loaded-state');
+      const analyzedTimestamp = document.getElementById('analyzed-timestamp');
+
+      // Metrics Tiles
+      const resProduceVal = document.getElementById('res-produce-val');
+      const resFreshnessBadge = document.getElementById('res-freshness-badge');
+      const resFreshnessIcon = document.getElementById('res-freshness-icon');
+      const resFreshnessText = document.getElementById('res-freshness-text');
+      const resConfidenceTileVal = document.getElementById('res-confidence-tile-val');
+      const resConfidencePctText = document.getElementById('res-confidence-pct-text');
+      const resConfidenceFill = document.getElementById('res-confidence-fill');
+
+      // Quality & Summary
+      const qualityCardBanner = document.getElementById('quality-card-banner');
+      const qualityCardIcon = document.getElementById('quality-card-icon');
+      const resQualityStatusText = document.getElementById('res-quality-status-text');
+      const resVisualSummaryText = document.getElementById('res-visual-summary-text');
+
+      // Grad-CAM & Details Table
+      const gradcamSectionCard = document.getElementById('gradcam-section-card');
+      const gradcamOrigImg = document.getElementById('gradcam-orig-img');
+      const gradcamHeatmapImg = document.getElementById('gradcam-heatmap-img');
+      const detailsSectionCard = document.getElementById('details-section-card');
+      const actionsSectionCard = document.getElementById('actions-section-card');
+
+      // Table Cells
+      const tableFilename = document.getElementById('table-filename');
+      const tablePredictedClass = document.getElementById('table-predicted-class');
+      const tableProduce = document.getElementById('table-produce');
+      const tableFreshness = document.getElementById('table-freshness');
+      const tableConfidence = document.getElementById('table-confidence');
+      const tableQualityStatus = document.getElementById('table-quality-status');
+
+      let currentSelectedFile = null;
+      let currentPreviewDataUrl = null;
+
+      function formatSize(bytes) {
+        if (!bytes || bytes === 0) return '0 KB';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+      }
+
+      function showError(msg) {
+        errorAlertText.textContent = msg || 'An unexpected error occurred. Please try again.';
+        errorAlertBox.style.display = 'flex';
+      }
+
+      function hideError() {
+        errorAlertBox.style.display = 'none';
+        errorAlertText.textContent = '';
+      }
+
+      function hideResults() {
+        resultsLoadedState.style.display = 'none';
+        resultsEmptyState.style.display = 'flex';
+        analyzedTimestamp.style.display = 'none';
+        gradcamSectionCard.style.display = 'none';
+        detailsSectionCard.style.display = 'none';
+        actionsSectionCard.style.display = 'none';
+        hideError();
+      }
+
+      function handleFileSelect(file) {
+        hideError();
+        hideResults();
+
+        if (!file) {
+          resetFileState();
+          return;
+        }
+
+        const validExts = ['.jpg', '.jpeg', '.png'];
+        const nameLower = file.name.toLowerCase();
+        const hasValidExt = validExts.some(ext => nameLower.endsWith(ext));
+
+        if (!hasValidExt) {
+          resetFileState();
+          showError('Unsupported file format. Please upload a JPG, JPEG, or PNG image.');
+          return;
+        }
+
+        currentSelectedFile = file;
+        const fileExt = file.name.split('.').pop().toUpperCase();
+        previewFilenameText.textContent = file.name;
+        previewFilesizeText.textContent = `${fileExt} • ${formatSize(file.size)}`;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          currentPreviewDataUrl = e.target.result;
+          previewImgElement.src = currentPreviewDataUrl;
+          dropZone.style.display = 'none';
+          previewBoxContainer.style.display = 'flex';
+          submitBtn.disabled = false;
+        };
+        reader.onerror = () => {
+          resetFileState();
+          showError('Failed to read image file.');
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function resetFileState() {
+        currentSelectedFile = null;
+        currentPreviewDataUrl = null;
+        fileInput.value = '';
+        previewImgElement.src = '#';
+        previewFilenameText.textContent = '';
+        previewFilesizeText.textContent = '';
+        previewBoxContainer.style.display = 'none';
+        dropZone.style.display = 'flex';
+        submitBtn.disabled = true;
+      }
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        handleFileSelect(file);
+      });
+
+      // Drag & Drop
+      ['dragenter', 'dragover'].forEach(name => {
+        dropZone.addEventListener(name, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.add('drag-active');
+        }, false);
+      });
+
+      ['dragleave', 'dragend', 'drop'].forEach(name => {
+        dropZone.addEventListener(name, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.remove('drag-active');
+        }, false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt && dt.files;
+        if (files && files.length > 0) {
+          fileInput.files = files;
+          handleFileSelect(files[0]);
+        }
+      });
+
+      // Click to browse
+      dropZone.addEventListener('click', (e) => {
+        if (e.target !== fileInput) {
+          fileInput.click();
+        }
+      });
+
+      btnRemovePreview.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      btnResetApp.addEventListener('click', () => {
+        resetFileState();
+        hideResults();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Form Submit -> /predict
+      uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hideError();
+
+        const file = currentSelectedFile || (fileInput.files && fileInput.files[0]);
+        if (!file) {
+          showError('No image selected. Please choose a food image first.');
+          return;
+        }
+
+        // Loading State
+        submitBtn.disabled = true;
+        btnSpinner.style.display = 'inline-block';
+        btnPlayIcon.style.display = 'none';
+        btnLabel.textContent = 'Analyzing image...';
+
+        const formData = new FormData();
+        formData.append('food_image', file);
+
+        try {
+          const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.success) {
+            const produce = data.produce || 'Unknown';
+            const freshness = data.freshness || 'Unknown';
+            const isFresh = freshness.toLowerCase() === 'fresh';
+            const isRotten = freshness.toLowerCase() === 'rotten';
+
+            // Timestamp
+            const now = new Date();
+            analyzedTimestamp.textContent = `Analyzed: ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            analyzedTimestamp.style.display = 'inline-block';
+
+            // Metric 1: Produce
+            resProduceVal.textContent = produce;
+
+            // Metric 2: Freshness Badge
+            resFreshnessText.textContent = freshness.toUpperCase();
+            if (isFresh) {
+              resFreshnessBadge.className = 'badge-freshness-status badge-fresh';
+              resFreshnessIcon.textContent = '✓';
+            } else if (isRotten) {
+              resFreshnessBadge.className = 'badge-freshness-status badge-rotten';
+              resFreshnessIcon.textContent = '⚠';
+            } else {
+              resFreshnessBadge.className = 'badge-freshness-status';
+              resFreshnessIcon.textContent = '●';
+            }
+
+            // Metric 3: Confidence Score & Progress Bar
+            const rawConf = typeof data.confidence === 'number' ? data.confidence : 0;
+            const pctVal = (rawConf * 100).toFixed(2);
+            const pctStr = pctVal + '%';
+
+            resConfidenceTileVal.textContent = pctStr;
+            resConfidencePctText.textContent = pctStr;
+            resConfidenceFill.style.width = pctVal + '%';
+
+            if (isFresh) {
+              resConfidenceFill.className = 'confidence-progress-fill fill-fresh';
+            } else if (isRotten) {
+              resConfidenceFill.className = 'confidence-progress-fill fill-rotten';
+            } else {
+              resConfidenceFill.className = 'confidence-progress-fill';
+            }
+
+            // Quality Inspection Banner
+            const qualityStatus = data.quality_status || (isFresh ? 'Visually appears fresh' : 'Signs of spoilage detected');
+            resQualityStatusText.textContent = qualityStatus;
+
+            if (isFresh) {
+              qualityCardBanner.className = 'quality-card-banner banner-fresh';
+              qualityCardIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            } else {
+              qualityCardBanner.className = 'quality-card-banner banner-rotten';
+              qualityCardIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+            }
+
+            // Visual Summary
+            resVisualSummaryText.textContent = data.visual_summary || `The model detected visual characteristics associated with ${freshness.toLowerCase()} ${produce}.`;
+
+            // Grad-CAM Dual Comparison
+            if (currentPreviewDataUrl) {
+              gradcamOrigImg.src = currentPreviewDataUrl;
+            }
+            if (data.gradcam_image) {
+              gradcamHeatmapImg.src = data.gradcam_image;
+              gradcamSectionCard.style.display = 'block';
+            } else {
+              gradcamSectionCard.style.display = 'none';
+            }
+
+            // Analysis Details Table
+            tableFilename.textContent = file.name;
+            tablePredictedClass.textContent = data.predicted_class || '—';
+            tableProduce.textContent = produce;
+            tableFreshness.textContent = freshness;
+            tableConfidence.textContent = pctStr;
+            tableQualityStatus.textContent = qualityStatus;
+
+            // Show loaded dashboard state & actions
+            resultsEmptyState.style.display = 'none';
+            resultsLoadedState.style.display = 'flex';
+            detailsSectionCard.style.display = 'block';
+            actionsSectionCard.style.display = 'block';
+
+          } else {
+            showError(data.error || 'Prediction failed. Please try another image.');
+          }
+        } catch (err) {
+          showError('Network error connecting to the prediction server. Please try again.');
+        } finally {
+          submitBtn.disabled = false;
+          btnSpinner.style.display = 'none';
+          btnPlayIcon.style.display = 'inline';
+          btnLabel.textContent = 'Analyze Freshness';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

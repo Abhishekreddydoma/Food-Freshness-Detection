@@ -1,0 +1,2 @@
+Date/Time,Image Filename,Predicted Class,Produce,Freshness,Confidence,Quality Status,Visual Summary,Grad-CAM Image
+2026-10-06 14:42:07,rottenBanana (103).jpg,RottenBanana,Banana,Rotten,100.00%,Signs of spoilage detected,The model detected visual characteristics associated with spoiled Banana.,/static/gradcam/gradcam_6bcc562a6c50.jpg

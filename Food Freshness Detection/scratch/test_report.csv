@@ -1,0 +1,2 @@
+Date/Time,Image Filename,Predicted Class,Produce,Freshness,Confidence,Quality Status,Visual Summary,Grad-CAM Image
+2026-09-21 14:07:52,test_rotten_orange.jpg,RottenOrange,Orange,Rotten,99.31%,Signs of spoilage detected,The model detected visual characteristics associated with spoiled Orange.,/static/gradcam/gradcam_0c4e18b7d5d7.jpg
